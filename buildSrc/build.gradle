@@ -1,0 +1,13 @@
+
+plugins {
+    id 'java-gradle-plugin'
+}
+
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = 'com.giniapps.plugins.GreetingPlugin'
+            implementationClass = 'com.giniapps.plugins.addlog.GreetingPlugin'
+        }
+    }
+}
