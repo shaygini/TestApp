@@ -9,7 +9,7 @@ public class B {
     C c;
 
     public B(){
-
+        System.out.println("hello from the other side");
     }
 
     public void setC(C c){

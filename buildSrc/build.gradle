@@ -11,3 +11,16 @@ gradlePlugin {
         }
     }
 }
+
+repositories {
+    google()
+    mavenCentral()
+    jcenter() // Warning: this repository is going to shut down soon
+}
+
+dependencies {
+    implementation 'org.javassist:javassist:3.23.0-GA'
+    implementation "com.android.tools.build:gradle-api:7.0.2"
+    implementation "com.android.tools.build:gradle:7.0.2"
+}
+
