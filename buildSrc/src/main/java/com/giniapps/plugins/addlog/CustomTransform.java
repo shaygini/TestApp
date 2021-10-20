@@ -34,6 +34,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
+import javassist.CtMethod;
 import javassist.LoaderClassPath;
 import javassist.NotFoundException;
 
@@ -52,8 +53,6 @@ class CustomTransform extends Transform {
         HashSet set = new HashSet<QualifiedContent.ContentType>();
         set.add(QualifiedContent.DefaultContentType.CLASSES);
         return set;
-//        ()QualifiedContent.DefaultContentType.CLASSES);
-//        return ImmutableSet.of(QualifiedContent.DefaultContentType.CLASSES);
     }
 
     @Override
@@ -62,7 +61,6 @@ class CustomTransform extends Transform {
         HashSet set = new HashSet<QualifiedContent.Scope>();
         set.add(QualifiedContent.Scope.PROJECT);
         return set;
-        //return ImmutableSet.of(QualifiedContent.Scope.PROJECT); // need to check EXTERNAL_LIBRARIES
     }
 
     @Override
@@ -181,10 +179,6 @@ class CustomTransform extends Transform {
     }
 
     public String getOutputPath(TransformOutputProvider transformOutputProvider) {
-
-//        ImmutableSet.of(QualifiedContent.DefaultContentType.CLASSES),
-//                ImmutableSet.of(QualifiedContent.Scope.PROJECT),
-
         Set<QualifiedContent.ContentType> types = new HashSet();
         types.add(QualifiedContent.DefaultContentType.CLASSES);
         Set<? super QualifiedContent.Scope> scopes = new HashSet();
@@ -227,7 +221,8 @@ class CustomTransform extends Transform {
 
     void processClasses(Set<CtClass> ctClasses) {
         for (CtClass ctClass : ctClasses) {
-            addLogMethod(ctClass);
+           // addLogMethod(ctClass);
+           // addLogInGoogleAnalytics(ctClass);
         }
     }
 
@@ -239,6 +234,22 @@ class CustomTransform extends Transform {
             // need to replace with addCodeIfNeeded
             addCode(constructor, body);
         }
+    }
+
+    void addLogInGoogleAnalytics(CtClass ctClass) {
+        if(ctClass.getName().equals("com.google.firebase.analytics.FirebaseAnalytics")) {
+            String body = "System.out.println(\"Added later\" + " + "\"" + ctClass.getName() + "\" + " + "this.getClass().getSimpleName());";
+            CtMethod ctMethod = null;
+            try {
+                CtMethod[] methods =  ctClass.getMethods();
+                ctMethod = ctClass.getMethod("logEvent", "(Ljava/lang/String;Landroid/os/Bundle;)V");
+                ctMethod.insertAfter(body);
+            } catch (NotFoundException | CannotCompileException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
     void addCode(CtConstructor constructor, String body) {

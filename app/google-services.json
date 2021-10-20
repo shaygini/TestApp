@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "297831773845",
+    "project_id": "giniapps-test",
+    "storage_bucket": "giniapps-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297831773845:android:3fd757d3ec5c6791084d9c",
+        "android_client_info": {
+          "package_name": "com.giniapps.testapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297831773845-qdo4pl8vg7jsbkecb2rggjm98jpoumb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXKvl40gwn5Cv2VQy-UZuwNL0_hL8i2mg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297831773845-qdo4pl8vg7jsbkecb2rggjm98jpoumb0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
