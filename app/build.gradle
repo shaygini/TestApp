@@ -46,4 +46,4 @@ dependencies {
 
 }
 
-// apply plugin: 'com.giniapps.plugins.GreetingPlugin'
+ apply plugin: 'com.giniapps.plugins.GreetingPlugin'

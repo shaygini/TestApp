@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ class CustomTransform extends Transform {
 
     @Override
     public String getName() {
-        return "CustomTransform";
+        return "CustomTransformName";
     }
 
     @Override
@@ -56,10 +57,19 @@ class CustomTransform extends Transform {
     }
 
     @Override
+    public Set<QualifiedContent.ContentType> getOutputTypes() {
+        System.err.println("getOutputTypes");
+        HashSet set = new HashSet<QualifiedContent.ContentType>();
+        set.add(QualifiedContent.DefaultContentType.CLASSES);
+        return set;
+    }
+
+    @Override
     public Set<? super QualifiedContent.Scope> getScopes() {
         System.err.println("getScopes");
         HashSet set = new HashSet<QualifiedContent.Scope>();
         set.add(QualifiedContent.Scope.PROJECT);
+
         return set;
     }
 
@@ -69,7 +79,7 @@ class CustomTransform extends Transform {
     }
 
     @Override
-    public void transform(TransformInvocation transformInvocation) {
+    public void transform(TransformInvocation transformInvocation) throws IOException {
         System.err.println("transform");
         Set<String> classNames = getClassNames(transformInvocation.getInputs());
         ClassPool classPool = createClassPoll(transformInvocation.getInputs(), transformInvocation.getReferencedInputs());
@@ -78,8 +88,10 @@ class CustomTransform extends Transform {
 
         processClasses(ctClasses);
 
+        transformInvocation.getOutputProvider().deleteAll();
         String outputPath = getOutputPath(transformInvocation.getOutputProvider());
         saveClasses(outputPath, ctClasses);
+        System.err.println("finish transform");
 
     }
 
@@ -179,16 +191,10 @@ class CustomTransform extends Transform {
     }
 
     public String getOutputPath(TransformOutputProvider transformOutputProvider) {
-        Set<QualifiedContent.ContentType> types = new HashSet();
-        types.add(QualifiedContent.DefaultContentType.CLASSES);
-        Set<? super QualifiedContent.Scope> scopes = new HashSet();
-        scopes.add(QualifiedContent.Scope.PROJECT);
-
-
         return transformOutputProvider.getContentLocation(
-                "trasfrom",
-                types,
-                scopes,
+                "classes",
+                getOutputTypes(),
+                getScopes(),
                 Format.DIRECTORY
         ).getAbsolutePath();
     }
